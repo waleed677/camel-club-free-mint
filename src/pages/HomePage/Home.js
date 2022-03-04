@@ -246,7 +246,7 @@ function Home() {
                    
                     <s.SpacerSmall />
                     <s.Container ai={"center"} jc={"center"} fd={"row"}>
-                    { balance > 0 ? (
+                   
                       <StyledButton
                         disabled={claimingNft ? 1 : 0}
                         onClick={(e) => {
@@ -258,17 +258,7 @@ function Home() {
                         {" "}
                         {claimingNft ? "Confirm Transaction in Wallet" : "Mint"}{" "}
                       </StyledButton>
-                    ) : ( 
-                      <s.TextDescription
-                      style={{
-                        textAlign: "center",
-                        color: "var(--accent-text)",
-                        
-                      }}
-                    >
-                      {" You have zero Balance  "}
-                    </s.TextDescription>
-                     )}
+                   
 
                     </s.Container>{" "}
                   </>
