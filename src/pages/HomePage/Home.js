@@ -54,6 +54,7 @@ function Home() {
     setFeedback(`Minting your ${CONFIG.NFT_NAME}`);
     setClaimingNft(true);
     blockchain.smartContract.methods.balanceUser(blockchain.account).call().then((bal) => {
+      console.log(bal);
      setBalance(bal);
     });
     blockchain.smartContract.methods
