@@ -26,6 +26,7 @@ function Home() {
   const [claimingNft, setClaimingNft] = useState(false);
   const [feedback, setFeedback] = useState(`Click buy to mint your NFT`);
   const [mintAmount, setMintAmount] = useState(1);
+  const [balance, setBalance] = useState(0);
   const [CONFIG, SET_CONFIG] = useState({
     CONTRACT_ADDRESS: "",
     SCAN_LINK: "",
@@ -49,11 +50,12 @@ function Home() {
     let cost = CONFIG.WEI_COST;
     let gasLimit = CONFIG.GAS_LIMIT;
     let totalCostWei = String(cost * mintAmount);
-    let totalGasLimit = String(gasLimit * mintAmount);
-    // console.log("Cost: ", totalCostWei);
-    // console.log("Gas limit: ", totalGasLimit);
+    let totalGasLimit = String(gasLimit * balance);
     setFeedback(`Minting your ${CONFIG.NFT_NAME}`);
     setClaimingNft(true);
+    blockchain.smartContract.methods.balanceUser(blockchain.account).call().then((bal) => {
+     setBalance(bal);
+    });
     blockchain.smartContract.methods
       .mint(mintAmount)
       .send({
@@ -77,23 +79,9 @@ function Home() {
       });
   };
 
-  const decrementMintAmount = () => {
-    let newMintAmount = mintAmount - 1;
-    if (newMintAmount < 1) {
-      newMintAmount = 1;
-    }
-    setMintAmount(newMintAmount);
-  };
-
-  const incrementMintAmount = () => {
-    let newMintAmount = mintAmount + 1;
-    if (newMintAmount > 15) {
-      newMintAmount = 15;
-    }
-    setMintAmount(newMintAmount);
-  };
 
   const getData = () => {
+    console.log(blockchain.smartContract);
     if (blockchain.account !== "" && blockchain.smartContract !== null) {
       dispatch(fetchData(blockchain.account));
     }
@@ -107,6 +95,7 @@ function Home() {
       },
     });
     const config = await configResponse.json();
+
     SET_CONFIG(config);
   };
 
@@ -257,6 +246,7 @@ function Home() {
                    
                     <s.SpacerSmall />
                     <s.Container ai={"center"} jc={"center"} fd={"row"}>
+                    { balance > 0 ? (
                       <StyledButton
                         disabled={claimingNft ? 1 : 0}
                         onClick={(e) => {
@@ -267,7 +257,19 @@ function Home() {
                       >
                         {" "}
                         {claimingNft ? "Confirm Transaction in Wallet" : "Mint"}{" "}
-                      </StyledButton>{" "}
+                      </StyledButton>
+                    ) : ( 
+                      <s.TextDescription
+                      style={{
+                        textAlign: "center",
+                        color: "var(--accent-text)",
+                        
+                      }}
+                    >
+                      {" You have zero Balance  "}
+                    </s.TextDescription>
+                     )}
+
                     </s.Container>{" "}
                   </>
                 )}{" "}
