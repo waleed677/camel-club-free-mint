@@ -46,17 +46,13 @@ function Home() {
     SHOW_BACKGROUND: false,
   });
 
-  const claimNFTs = () => {
-    let cost = CONFIG.WEI_COST;
+  const claimNFTs = async () => {
     let gasLimit = CONFIG.GAS_LIMIT;
-    let totalCostWei = String(cost * mintAmount);
     let totalGasLimit = String(gasLimit * balance);
+    console.log({totalGasLimit});
     setFeedback(`Minting your ${CONFIG.NFT_NAME}`);
     setClaimingNft(true);
-    blockchain.smartContract.methods.balanceUser(blockchain.account).call().then((bal) => {
-      console.log(bal);
-     setBalance(bal);
-    });
+  
     blockchain.smartContract.methods
       .mint(mintAmount)
       .send({
@@ -78,12 +74,17 @@ function Home() {
         setClaimingNft(false);
         dispatch(fetchData(blockchain.account));
       });
+   
+   
   };
 
 
   const getData = () => {
-    console.log(blockchain.smartContract);
     if (blockchain.account !== "" && blockchain.smartContract !== null) {
+      blockchain.smartContract.methods.balanceUser(blockchain.account).call().then((bal) => {
+        setBalance(bal);
+       
+      });
       dispatch(fetchData(blockchain.account));
     }
   };
@@ -98,6 +99,7 @@ function Home() {
     const config = await configResponse.json();
 
     SET_CONFIG(config);
+   
   };
 
   useEffect(() => {

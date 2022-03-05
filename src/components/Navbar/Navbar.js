@@ -105,7 +105,7 @@ const Navbar = () => {
 
         <Nav scrollNav={scrollNav}>
           <NavContainer>
-            <NavLink to="">
+            <NavLink >
                 <NavLogo alt={"logo"} src={"config/images/logo.png"} onClick={toggleHome}></NavLogo>
             </NavLink>
           <NavMenu onClick={handleClick} click={click}>
