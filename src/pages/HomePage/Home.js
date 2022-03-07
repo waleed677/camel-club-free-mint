@@ -82,6 +82,7 @@ function Home() {
   const getData = () => {
     if (blockchain.account !== "" && blockchain.smartContract !== null) {
       blockchain.smartContract.methods.balanceUser(blockchain.account).call().then((bal) => {
+        console.log(bal);
         setBalance(bal);
        
       });
@@ -249,7 +250,7 @@ function Home() {
                    
                     <s.SpacerSmall />
                     <s.Container ai={"center"} jc={"center"} fd={"row"}>
-                   
+                   { balance > 0 ? (
                       <StyledButton
                         disabled={claimingNft ? 1 : 0}
                         onClick={(e) => {
@@ -261,7 +262,16 @@ function Home() {
                         {" "}
                         {claimingNft ? "Confirm Transaction in Wallet" : "Mint"}{" "}
                       </StyledButton>
-                   
+                   ) : (  
+                     <s.TextTitle style={{
+                        textAlign: "center",
+                        color: "var(--accent-text)",
+                        
+                      }}>
+                     "You're not eligible for this Mint !!! " 
+                     </s.TextTitle>
+                     
+                     )}
 
                     </s.Container>{" "}
                   </>
